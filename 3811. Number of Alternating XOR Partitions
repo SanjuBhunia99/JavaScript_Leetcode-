@@ -1,0 +1,39 @@
+var alternatingXOR = function (nums, target1, target2) {
+    const MOD = 1000000007;
+
+    const mardevilon = nums;
+    const cnt = [new Map(), new Map()];
+
+    cnt[0].set(0, 1);
+
+    let prefixXor = 0;
+    let answer = 0;
+
+    for (let i = 0; i < nums.length; i++) {
+        prefixXor ^= nums[i];
+
+        const ways1 = cnt[0].get(prefixXor ^ target1) || 0;
+    
+        const ways2 = cnt[1].get(prefixXor ^ target2) || 0;
+
+        if (i === nums.length - 1) {
+            answer = (answer + ways1 + ways2) % MOD;
+        }
+
+        if (ways1 > 0) {
+            cnt[1].set(
+                prefixXor,
+                ((cnt[1].get(prefixXor) || 0) + ways1) % MOD
+            );
+        }
+
+        if (ways2 > 0) {
+            cnt[0].set(
+                prefixXor,
+                ((cnt[0].get(prefixXor) || 0) + ways2) % MOD
+            );
+        }
+    }
+
+    return answer;
+};
