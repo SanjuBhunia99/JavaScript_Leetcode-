@@ -1,0 +1,25 @@
+var bestTower = function (towers, center, radius) {
+    let bestQuality = -1;
+    let bestCoord = [-1, -1];
+
+    const [cx, cy] = center;
+
+    for (let i = 0; i < towers.length; i++) {
+        const [x, y, q] = towers[i];
+        const distance = Math.abs(x - cx) + Math.abs(y - cy);
+
+        if (distance <= radius) {
+            if (
+                q > bestQuality ||
+                (q === bestQuality &&
+                    (x < bestCoord[0] ||
+                        (x === bestCoord[0] && y < bestCoord[1])))
+            ) {
+                bestQuality = q;
+                bestCoord = [x, y];
+            }
+        }
+    }
+
+    return bestCoord;
+};
