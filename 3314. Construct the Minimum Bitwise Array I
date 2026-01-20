@@ -1,0 +1,18 @@
+var minBitwiseArray = function(nums) {
+    const n = nums.length;
+    const ans = new Array(n);
+
+    for (let i = 0; i < n; i++) {
+        const num = nums[i];
+        let x = -1;
+        for (let candidate = 0; candidate < num; candidate++) {
+            if ((candidate | (candidate + 1)) === num) {
+                x = candidate;
+                break; 
+            }
+        }
+        ans[i] = x;
+    }
+
+    return ans;
+};
