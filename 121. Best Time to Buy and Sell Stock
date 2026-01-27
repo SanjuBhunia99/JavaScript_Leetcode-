@@ -4,7 +4,7 @@ var maxProfit = function(prices) {
 
     for (let price of prices) {
         if (price < minPrice) {
-            minPrice = price;        // best day to buy so far
+            minPrice = price;
         } else {
             maxProfit = Math.max(maxProfit, price - minPrice);
         }
