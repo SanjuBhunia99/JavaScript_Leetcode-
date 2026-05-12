@@ -1,0 +1,21 @@
+var combinationSum = function(candidates, target) {
+    let result = [];
+    function backtrack(start, target, current) {
+        if (target === 0) {
+            result.push([...current]);
+            return;
+        }
+        if (target < 0) {
+            return;
+        }
+        for (let i = start; i < candidates.length; i++) {
+
+            current.push(candidates[i]);
+            backtrack(i, target - candidates[i], current);
+
+            current.pop();
+        }
+    }
+    backtrack(0, target, []);
+    return result;
+};
