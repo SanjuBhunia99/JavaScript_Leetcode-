@@ -9,5 +9,6 @@ var maxProfit = function(prices) {
             min = prices[i]
         }
     }
+
     return maxProfit;
 };
