@@ -10,6 +10,5 @@ var getCommon = function(nums1, nums2) {
         else
             j++;
     }
-
     return -1;
 };
