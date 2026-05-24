@@ -1,0 +1,18 @@
+var isTransformable = function(s, t) {
+    pos = Array(10).fill(0)
+    idx  = pos.map(_ => [])
+    
+    for (i = 0; c = s[i]; i++) idx[+c].push(i)
+    
+    for (i = 0; c = t[i]; i++) {
+        d = +c
+        if (pos[d] >= idx[d].length) return false
+        q = idx[d][pos[d]++]
+        for (j = 0; j < d; ++j)
+            if (idx[j][pos[j]] < q)
+                return false
+        
+    }
+    
+    return true
+};
