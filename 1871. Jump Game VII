@@ -1,0 +1,13 @@
+const canReach = (s, minJump, maxJump) => {
+        const n = s.length;
+        const dp = new Uint8Array(n);
+        dp[0] = 1;
+        let cnt = 0;
+
+        for (let i = 1; i < n; i++) {
+                cnt = cnt + (dp[i - minJump] ?? 0) - (dp[i - maxJump - 1] ?? 0);
+                dp[i] = cnt && s[i] === '0';
+        }
+
+        return dp[n - 1];
+};
