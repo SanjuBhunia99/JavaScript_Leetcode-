@@ -21,7 +21,6 @@ var stringIndices = function(wordsContainer, wordsQuery) {
             }
         }
     }
-
     const ans = [];
     for (const query of wordsQuery) {
         let node = trie;
