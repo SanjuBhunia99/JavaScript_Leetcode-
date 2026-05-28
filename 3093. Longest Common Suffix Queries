@@ -1,0 +1,38 @@
+var stringIndices = function(wordsContainer, wordsQuery) {
+    const trie = { bestIdx: -1, bestLen: Infinity };
+
+    for (let i = 0; i < wordsContainer.length; i++) {
+        const word = wordsContainer[i];
+        const len = word.length;
+        let node = trie;
+        if (len < node.bestLen) {
+            node.bestIdx = i;
+            node.bestLen = len;
+        }
+        for (let j = word.length - 1; j >= 0; j--) {
+            const ch = word[j];
+            if (!node[ch]) {
+                node[ch] = { bestIdx: -1, bestLen: Infinity };
+            }
+            node = node[ch];
+            if (len < node.bestLen) {
+                node.bestIdx = i;
+                node.bestLen = len;
+            }
+        }
+    }
+
+    const ans = [];
+    for (const query of wordsQuery) {
+        let node = trie;
+        let result = node.bestIdx;
+        for (let j = query.length - 1; j >= 0; j--) {
+            const ch = query[j];
+            if (!node[ch]) break;
+            node = node[ch];
+            result = node.bestIdx;
+        }
+        ans.push(result);
+    }
+    return ans;
+};
