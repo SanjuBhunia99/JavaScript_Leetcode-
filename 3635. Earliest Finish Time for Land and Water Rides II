@@ -1,0 +1,17 @@
+var earliestFinishTime = function(landStartTime, landDuration, waterStartTime, waterDuration) {
+    const calc = (a1, t1, a2, t2) => {
+        let minEnd = Infinity;
+        for (let i = 0; i < a1.length; i++) {
+            minEnd = Math.min(minEnd, a1[i] + t1[i]);
+        }
+        let ans = Infinity;
+        for (let j = 0; j < a2.length; j++) {
+            ans = Math.min(ans, Math.max(minEnd, a2[j]) + t2[j]);
+        }
+        return ans;
+    };
+    return Math.min(
+        calc(landStartTime,  landDuration,  waterStartTime, waterDuration),
+        calc(waterStartTime, waterDuration, landStartTime,  landDuration)
+    );
+};
