@@ -1,0 +1,30 @@
+const MAX = 100001;
+const preWave = new Int32Array(MAX);
+
+(() => {
+    const waviness = (n) => {
+        if (n < 100) return 0;
+        const digits = [];
+        let tmp = n;
+        while (tmp > 0) {
+            digits.push(tmp % 10);
+            tmp = Math.floor(tmp / 10);
+        }
+        digits.reverse(); 
+
+        let count = 0;
+        for (let i = 1; i < digits.length - 1; i++) {
+            const p = digits[i - 1], c = digits[i], nx = digits[i + 1];
+            if ((c > p && c > nx) || (c < p && c < nx)) count++;
+        }
+        return count;
+    };
+
+    for (let i = 1; i < MAX; i++) {
+        preWave[i] = preWave[i - 1] + waviness(i);
+    }
+})();
+
+var totalWaviness = function(num1, num2) {
+    return preWave[num2] - preWave[num1 - 1];
+};
