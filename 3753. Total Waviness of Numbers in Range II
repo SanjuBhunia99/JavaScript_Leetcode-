@@ -1,0 +1,63 @@
+var totalWaviness = function(num1, num2) {
+    const NONE = 10;
+
+    const solve = (n) => {
+        if (n <= 0) return 0;
+
+        const digits = [];
+        let tmp = BigInt(n);
+        while (tmp > 0n) {
+            digits.unshift(Number(tmp % 10n));
+            tmp /= 10n;
+        }
+        const len = digits.length;
+  
+        const memo = new Map();
+
+        const dp = (pos, pp, prev, tight, started) => {
+            if (pos === len) return [0, 1];
+
+            const key = `${pos},${pp},${prev},${tight?1:0},${started?1:0}`;
+            if (memo.has(key)) return memo.get(key);
+
+            const limit = tight ? digits[pos] : 9;
+            let sumW = 0, sumC = 0;
+
+            for (let d = 0; d <= limit; d++) {
+                const nt = tight && d === limit;
+
+                if (!started && d === 0) {
+                    
+                    const [w, c] = dp(pos + 1, NONE, NONE, nt, false);
+                    sumW += w; sumC += c;
+                    continue;
+                }
+
+                if (!started) {
+                    
+                    const [w, c] = dp(pos + 1, NONE, d, nt, true);
+                    sumW += w; sumC += c;
+                    continue;
+                }
+
+                let bonus = 0;
+                if (pp !== NONE && pos < len) {
+                    if ((prev > pp && prev > d) || (prev < pp && prev < d)) {
+                        bonus = 1;
+                    }
+                }
+
+                const [w, c] = dp(pos + 1, prev, d, nt, true);
+                sumW += w + bonus * c;
+                sumC += c;
+            }
+
+            memo.set(key, [sumW, sumC]);
+            return [sumW, sumC];
+        };
+
+        return dp(0, NONE, NONE, true, false)[0];
+    };
+
+    return solve(num2) - solve(num1 - 1);
+};
