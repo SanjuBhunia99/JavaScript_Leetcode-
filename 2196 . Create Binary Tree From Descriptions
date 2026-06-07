@@ -1,0 +1,23 @@
+var createBinaryTree = function(descriptions) {
+    const nodes    = new Map();
+    const children = new Set(); 
+    const getNode = (val) => {
+        if (!nodes.has(val)) nodes.set(val, new TreeNode(val));
+        return nodes.get(val);
+    };
+
+    for (const [parent, child, isLeft] of descriptions) {
+        const parentNode = getNode(parent);
+        const childNode  = getNode(child);
+
+        if (isLeft) parentNode.left  = childNode;
+        else        parentNode.right = childNode;
+
+        children.add(child);
+    }
+
+    
+    for (const [val, node] of nodes) {
+        if (!children.has(val)) return node;
+    }
+};
