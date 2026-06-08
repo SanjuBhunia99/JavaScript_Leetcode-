@@ -1,0 +1,13 @@
+var pivotArray = function(nums, pivot) {
+    const less    = [];
+    const equal   = [];
+    const greater = [];
+
+    for (const n of nums) {
+        if(n < pivot) less.push(n);
+        else if (n > pivot) greater.push(n);
+        else equal.push(n);
+    }
+
+    return [...less, ...equal, ...greater];
+};
