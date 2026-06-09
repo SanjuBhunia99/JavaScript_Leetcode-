@@ -1,0 +1,5 @@
+var maxTotalValue = function(nums, k) {
+    const maxVal = Math.max(...nums);
+    const minVal = Math.min(...nums);
+    return k * (maxVal - minVal);
+};
