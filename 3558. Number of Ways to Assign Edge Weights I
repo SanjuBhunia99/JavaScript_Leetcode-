@@ -1,0 +1,42 @@
+var assignEdgeWeights = function(edges) {
+    const MOD = 1_000_000_007n;
+    const n = edges.length + 1;
+
+
+    const adj = Array.from({length: n + 1}, () => []);
+    for (const [u, v] of edges) {
+        adj[u].push(v);
+        adj[v].push(u);
+    }
+
+    const dist = new Int32Array(n + 1).fill(-1);
+    dist[1] = 0;
+    const queue = [1];
+    let maxDepth = 0;
+
+    for (let i = 0; i < queue.length; i++) {
+        const node = queue[i];
+        for (const nb of adj[node]) {
+            if (dist[nb] === -1) {
+                dist[nb] = dist[node] + 1;
+                maxDepth = Math.max(maxDepth, dist[nb]);
+                queue.push(nb);
+            }
+        }
+    }
+
+    if (maxDepth === 0) return 0; 
+    
+    return Number(modPow(2n, BigInt(maxDepth - 1), MOD));
+};
+
+const modPow = (base, exp, mod) => {
+    let result = 1n;
+    base %= mod;
+    while (exp > 0n) {
+        if (exp % 2n === 1n) result = result * base % mod;
+        base = base * base % mod;
+        exp /= 2n;
+    }
+    return result;
+};
