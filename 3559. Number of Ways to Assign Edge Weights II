@@ -1,0 +1,72 @@
+var assignEdgeWeights = function(edges, queries) {
+    const MOD = 1_000_000_007n;
+    const n = edges.length + 1;
+    const LOG = Math.ceil(Math.log2(n + 1)) + 1;
+
+    const graph = Array.from({length: n + 1}, () => []);
+    for (const [u, v] of edges) {
+        graph[u].push(v);
+        graph[v].push(u);
+    }
+
+    const depth = new Int32Array(n + 1);
+    const parent = Array.from({length: LOG}, () => new Int32Array(n + 1).fill(-1));
+
+    const visited = new Uint8Array(n + 1);
+    const queue = [1];
+    visited[1] = 1;
+    for (let i = 0; i < queue.length; i++) {
+        const u = queue[i];
+        for (const v of graph[u]) {
+            if (!visited[v]) {
+                visited[v] = 1;
+                depth[v] = depth[u] + 1;
+                parent[0][v] = u;
+                queue.push(v);
+            }
+        }
+    }
+
+    for (let k = 1; k < LOG; k++) {
+        for (let v = 1; v <= n; v++) {
+            const p = parent[k-1][v];
+            parent[k][v] = (p === -1) ? -1 : parent[k-1][p];
+        }
+    }
+
+    const lca = (u, v) => {
+        if (depth[u] < depth[v]) [u, v] = [v, u];
+        let diff = depth[u] - depth[v];
+        for (let k = 0; k < LOG; k++) {
+            if ((diff >> k) & 1) u = parent[k][u];
+        }
+        if (u === v) return u;
+        for (let k = LOG - 1; k >= 0; k--) {
+            if (parent[k][u] !== -1 && parent[k][u] !== parent[k][v]) {
+                u = parent[k][u];
+                v = parent[k][v];
+            }
+        }
+        return parent[0][u];
+    };
+
+    const pow2 = new BigInt64Array(n + 1);
+    pow2[0] = 1n;
+    for (let i = 1; i <= n; i++) {
+        pow2[i] = (pow2[i-1] * 2n) % MOD;
+    }
+
+    const ans = new Array(queries.length);
+    for (let i = 0; i < queries.length; i++) {
+        const [u, v] = queries[i];
+        if (u === v) {
+            ans[i] = 0;
+            continue;
+        }
+        const l = lca(u, v);
+        const k = depth[u] + depth[v] - 2 * depth[l]; 
+        ans[i] = Number(pow2[k - 1]);
+    }
+
+    return ans;
+};
