@@ -1,0 +1,22 @@
+var pairSum = function(head) {
+    let slow = head, fast = head;
+    while(fast && fast.next){
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    let prev = null, curr = slow;
+    while(curr){
+        const next = curr.next;
+        curr.next = prev;
+        prev = curr;
+        curr = next;
+    }
+    let ans = 0;
+    let left = head, right = prev;
+    while(right){
+        ans = Math.max(ans, left.val + right.val);
+        left = left.next;
+        right = right.next;
+    }
+    return ans;
+};
