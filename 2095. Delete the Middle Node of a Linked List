@@ -1,0 +1,17 @@
+var deleteMiddle = function(head) {
+    if(!head.next) return null;
+    const dummy = new ListNode(0, head);
+
+    let prev = dummy;
+    let slow = head;
+    let fast = head;
+    while(fast.next && fast.next.next){
+        prev = prev.next;
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    if(fast.next) prev = prev.next;
+    prev.next = prev.next.next;
+    return head;
+
+};
