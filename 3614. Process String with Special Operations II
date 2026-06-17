@@ -1,0 +1,36 @@
+var processStr = function(s, k) {
+    let len = 0n;
+    const lens = [0n]; 
+    for (const ch of s) {
+        if (ch === '*') {
+            if (len > 0n) len -= 1n;
+        } else if (ch === '#') {
+            len *= 2n;
+        } else if (ch === '%') {
+        } else {
+            len += 1n;
+        }
+        lens.push(len);
+    }
+
+    const finalLen = lens[lens.length - 1];
+    if (BigInt(k) >= finalLen) return '.';
+
+    let pos = BigInt(k); 
+
+    for (let i = s.length - 1; i >= 0; i--) {
+        const ch = s[i];
+        const lenBefore = lens[i]; 
+
+        if (ch === '*') {
+           } else if (ch === '#') {
+            if (pos >= lenBefore) pos -= lenBefore;
+        } else if (ch === '%') {
+            const lenAfter = lens[i + 1];
+            pos = lenAfter - 1n - pos;
+        } else {
+            if (pos === lenBefore) return ch;          
+        }
+    }
+    return '.'; 
+};
