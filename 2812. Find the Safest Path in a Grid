@@ -1,0 +1,60 @@
+var maximumSafenessFactor = function(grid) {
+    const n = grid.length;
+    const dirs = [[0,1],[0,-1],[1,0],[-1,0]];
+  
+    const dist = Array.from({length: n}, () => new Int32Array(n).fill(-1));
+    const queue = [];
+
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+            if (grid[i][j] === 1) {
+                dist[i][j] = 0;
+                queue.push(i * n + j);
+            }
+        }
+    }
+
+    for (let qi = 0; qi < queue.length; qi++) {
+        const r = Math.floor(queue[qi] / n);
+        const c = queue[qi] % n;
+        for (const [dr, dc] of dirs) {
+            const nr = r + dr, nc = c + dc;
+            if (nr >= 0 && nr < n && nc >= 0 && nc < n && dist[nr][nc] === -1) {
+                dist[nr][nc] = dist[r][c] + 1;
+                queue.push(nr * n + nc);
+            }
+        }
+    }
+   
+    if (dist[0][0] === 0 || dist[n-1][n-1] === 0) return 0;
+  
+    const canReach = (minSafe) => {
+        if (dist[0][0] < minSafe || dist[n-1][n-1] < minSafe) return false;
+        const seen = Array.from({length: n}, () => new Uint8Array(n));
+        seen[0][0] = 1;
+        const q = [0];
+        for (let qi = 0; qi < q.length; qi++) {
+            const r = Math.floor(q[qi] / n);
+            const c = q[qi] % n;
+            if (r === n-1 && c === n-1) return true;
+            for (const [dr, dc] of dirs) {
+                const nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < n && nc >= 0 && nc < n
+                    && !seen[nr][nc] && dist[nr][nc] >= minSafe) {
+                    seen[nr][nc] = 1;
+                    q.push(nr * n + nc);
+                }
+            }
+        }
+        return false;
+    };
+
+    let lo = 0, hi = n * 2; 
+    while (lo < hi) {
+        const mid = (lo + hi + 1) >> 1;
+        if (canReach(mid)) lo = mid;
+        else hi = mid - 1;
+    }
+
+    return lo;
+};
