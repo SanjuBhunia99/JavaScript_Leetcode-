@@ -1,0 +1,18 @@
+var pathExistenceQueries = function(n, nums, maxDiff, queries) {
+    const component = new Array(n).fill(0);
+    let id = 0;
+
+    for (let i = 1; i < n; i++) {
+        if (nums[i] - nums[i - 1] > maxDiff) {
+            id++;
+        }
+        component[i] = id;
+    }
+
+    const ans = [];
+    for (const [u, v] of queries) {
+        ans.push(component[u] === component[v]);
+    }
+
+    return ans;
+};
