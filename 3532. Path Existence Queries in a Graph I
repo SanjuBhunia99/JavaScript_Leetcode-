@@ -13,6 +13,5 @@ var pathExistenceQueries = function(n, nums, maxDiff, queries) {
     for (const [u, v] of queries) {
         ans.push(component[u] === component[v]);
     }
-
     return ans;
 };
