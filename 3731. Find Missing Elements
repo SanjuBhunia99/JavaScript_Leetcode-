@@ -1,0 +1,16 @@
+
+var findMissingElements = function(nums) {
+    let minVal = Math.min(...nums);
+    let maxVal = Math.max(...nums);
+
+    const set = new Set(nums);
+    const result = [];
+
+    for (let i = minVal + 1; i < maxVal; i++) {
+        if (!set.has(i)) {
+            result.push(i);
+        }
+    }
+
+    return result;
+};
